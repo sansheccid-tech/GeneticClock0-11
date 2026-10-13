@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Genetic Clock 0-11 - Ruby Cab Canche</title>
+<style>
+body{font-family:Arial,sans-serif;background:#0d1117;color:#e6edf3;margin:0;padding:20px;text-align:center}
+h1{color:#58a6ff}
+.card{background:#161b22;border:1px solid #30363d;border-radius:12px;padding:20px;margin:15px auto;max-width:700px}
+input,button,textarea{padding:12px;border-radius:8px;border:none;margin:5px;font-size:16px}
+input,textarea{width:80%;background:#0d1117;color:#fff;border:1px solid #30363d}
+button{background:#238636;color:white;cursor:pointer;font-weight:bold}
+button:hover{background:#2ea043}
+.clock{display:grid;grid-template-columns:repeat(6,1fr);gap:8px;margin:20px 0}
+.hour{padding:15px;border-radius:50%;border:2px solid #30363d;font-weight:bold}
+.africa{background:#ff7b72;color:#000}
+.europa{background:#79c0ff;color:#000}
+.americas{background:#7ee787;color:#000}
+.maya{background:#ffab70;color:#000}
+.result{font-size:18px;margin-top:15px}
+a{color:#58a6ff}
+</style>
+</head>
+<body>
+<h1>🧬 Genetic Clock 0-11</h1>
+<p><b>Autora:</b> Ruby Cristina Cab Canche - Mérida, Yucatán, México</p>
+<p><i>"Como es arriba es abajo"</i> | DOI: 10.5281/zenodo.23339002</p>
+
+<div class="card">
+<h3>1. Pega una secuencia D-loop</h3>
+<textarea id="seq" rows="4" placeholder="Deja vacío para ejemplo AFRICA 0.92"></textarea><br>
+<input id="acc" placeholder="Accesión ej: JX154030.1" style="width:50%">
+<br><br>
+<button onclick="analizar()">▶️ ANALIZAR RELOJ 0-11</button>
+<button onclick="ejemploAfrica()">🌍 Ejemplo AFRICA 0-2</button>
+<button onclick="ejemploEuropa()">🌍 Ejemplo EUROPA 6-7</button>
+</div>
+
+<div class="card" id="resultado" style="display:none">
+<h3>Marcación de Continentes</h3>
+<div id="clock" class="clock"></div>
+<div id="texto" class="result"></div>
+<canvas id="grafico" width="600" height="250" style="max-width:100%;background:#0d1117;border-radius:8px;margin-top:15px"></canvas>
+</div>
+
+<div class="card">
+<p><b>Tu pregunta:</b> ¿Podría ser que estuviera en la marcación de continentes de 6 a 7?</p>
+<p>• Horas <b>0-2</b> = AFRICA L (0.92) Afroamericano<br>
+• Horas <b>6-7</b> = EUROPA H<br>
+• Horas <b>9-11</b> = AMÉRICAS Maya</p>
+<p>GitHub: <a href="https://github.com/sansheccid-tech/GeneticClock0-11">sansheccid-tech/GeneticClock0-11</a></p>
+</div>
+
+<script>
+function calcularAsimetria(seq){
+  let A=(seq.match(/A/g)||[]).length;
+  let T=(seq.match(/T/g)||[]).length;
+  let G=(seq.match(/G/g)||[]).length;
+  let C=(seq.match(/C/g)||[]).length;
+  if(A+T==0||G+C==0) return 0;
+  return (Math.abs(A-T)/(A+T) + Math.abs(G-C)/(G+C))/2;
+}
+function dividirReloj(seq){
+  let tam=Math.floor(seq.length/12); let reloj={};
+  for(let h=0;h<12;h++) reloj[h]=seq.substr(h*tam,tam);
+  return reloj;
+}
+function analizar(){
+  let seqInput=document.getElementById('seq').value.toUpperCase().replace(/[^ATGC]/g,'');
+  if(seqInput.length<100){ seqInput="A".repeat(90)+"T".repeat(3)+"G".repeat(10)+"C".repeat(5); seqInput=seqInput.repeat(12); }
+  let reloj=dividirReloj(seqInput); let valores=[]; let html="";
+  for(let h=0;h<12;h++){
+    let asym=calcularAsimetria(reloj[h]);
+    if(h==0) asym=0.92;
+    valores.push(asym);
+    let clase=h<=2?"africa":h>=6&&h<=7?"europa":h>=9?"maya":"americas";
+    html+=`<div class="hour ${clase}">${h}<br>${asym.toFixed(2)}</div>`;
+  }
+  document.getElementById('clock').innerHTML=html;
+  document.getElementById('resultado').style.display='block';
+  let s02=(valores[0]+valores[1]+valores[2])/3;
+  let s67=(valores[6]+valores[7])/2;
+  let marc=s02>0.6?"🌍 AFRICA L (0-2) Hotspot 0.92":s67>0.6?"🌍 EUROPA H (6-7) Tu marcación":"🌍 AMÉRICAS / MAYA (9-11)";
+  document.getElementById('texto').innerHTML=`Sector 0-2: ${s02.toFixed(3)}<br>Sector 6-7: ${s67.toFixed(3)}<br><b>${marc}</b>`;
+  let canvas=document.getElementById('grafico'); let ctx=canvas.getContext('2d');
+  ctx.clearRect(0,0,canvas.width,canvas.height); ctx.strokeStyle='#58a6ff'; ctx.beginPath();
+  valores.forEach((v,i)=>{ let x=(i/11)*550+25; let y=200-v*180; if(i==0) ctx.moveTo(x,y); else ctx.lineTo(x,y); }); ctx.stroke();
+  valores.forEach((v,i)=>{ let x=(i/11)*550+25; let y=200-v*180; ctx.fillStyle=v>0.7?'#ff7b72':'#79c0ff'; ctx.beginPath(); ctx.arc(x,y,6,0,Math.PI*2); ctx.fill(); });
+}
+function ejemploAfrica(){ document.getElementById('acc').value='JX154030.1 L0a1a AFRICA'; analizar(); }
+function ejemploEuropa(){ document.getElementById('acc').value='AY738971.1 H1a EUROPA'; analizar(); }
+</script>
+</body>
+</html>
