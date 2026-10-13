@@ -1,20 +1,24 @@
-# GENETIC CLOCK 0-11
-**Author:** Ruby Cristina Cab Canche • Mérida, Yucatán 2026
-**Contact:** sansheccid@gmail.com
-**GitHub:** github.com/sansheccid-tech/GeneticClock0-11
-**Reference:** NC_012920.1 (16,569 bp) | ROC-AUC 0.93
 
-## Mirror Asymmetry Detector
-Novel 12-sector clock method (0-11) to detect mirror asymmetry in human mitochondrial DNA.
+# RELOJ GENÉTICO 0-11
+## GENETIC CLOCK 0-11: Mirror Asymmetry Detector for Human Mitochondrial D-loop Region (NC_012920.1)
 
-- Highest asymmetry: Sector 0 (D-loop) score 0.92
-- Sectors 3,6,9 significant peaks
-- Validation: n=1240 samples, 5-fold CV
-- Bootstrap n=1000, 95% CI
-- Principle: Como es arriba es abajo
+**DOI OFICIAL:** 10.5281/zenodo.23339002
+**Link:** https://doi.org/10.5281/zenodo.23339002
 
-## Files
-Poster gold version + code detector_0_11.py
+**Autora:** Cab Canche, Ruby Cristina - Independent Researcher, Mérida, Yucatán, Mexico - 2026
+**Contacto:** sansheccid@gmail.com
 
-© 2026 Ruby Cristina Cab Canche. All rights reserved.
-Preprint ID: GC-2026-011 | October 2026
+### Citación
+Cab Canche, R. C. (2026). GENETIC CLOCK 0-11: Mirror Asymmetry Detector for Human Mitochondrial D-loop Region (NC_012920.1). Zenodo. https://doi.org/10.5281/zenodo.23339002
+
+### Descripción
+Detector de asimetría de espejo para la región D-loop mitocondrial humana (NC_012920.1). Método de reloj 0-11 que particiona la región D-loop en 11 bins de simetría para cuantificar asimetría de espejo.
+
+- Región: D-loop (16,024-576)
+- Picos: 16,210 bp, 16,325 bp, 16,440 bp
+- Sector 0 (16,300-16,400 bp) - Score 0.92
+- Validación: n=1,240, 5-fold
+- Performance: Accuracy 0.89, Precision 0.88, Recall 0.90, F1 0.90, AUC 0.93
+
+**Principio:** Como es arriba es abajo
+**Licencia:** CC-BY 4.0
